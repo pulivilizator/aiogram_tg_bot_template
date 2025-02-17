@@ -1,0 +1,11 @@
+.env
+.idea
+.secrets.toml
+venv/
+.venv/
+
+/nats/data/
+/redis-data/
+/database/data/
+.DS_Store/
+__pycache__/

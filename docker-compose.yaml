@@ -1,0 +1,67 @@
+services:
+  nats:
+    image: nats:2.10.24
+    restart: on-failure
+    entrypoint: /nats-server
+    command: "-c /config/nats.conf"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - ./nats/data:/data
+      - ./nats/nats.conf:/config/nats.conf
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
+  redis:
+    image: redis:7.4.2
+    container_name: redis
+    command: >
+      redis-server
+      --appendonly yes           
+      --appendfsync everysec     
+      --save 900 1              
+      --save 300 10
+      --save 60 10000
+      --maxmemory 3gb           
+      --maxmemory-policy allkeys-lru
+      --bind 0.0.0.0            
+      --lazyfree-lazy-eviction yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
+  postgres:
+    image: postgres:17.3
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bot
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username -d bot"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
