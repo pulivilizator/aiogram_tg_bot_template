@@ -7,6 +7,7 @@ dependencies = [
     "aiogram>=3.18.0",
     "aiogram-dialog>=2.3.1",
     "alembic>=1.14.1",
+    "asyncpg>=0.30.0",
     "dishka>=1.4.2",
     "dynaconf>=3.2.9",
     "faststream>=0.5.34",
@@ -15,4 +16,5 @@ dependencies = [
     "orjson>=3.10.15",
     "redis>=5.2.1",
     "sqlalchemy[asyncio]>=2.0.38",
+    "structlog>=25.1.0",
 ]
