@@ -1,4 +1,9 @@
-FROM ubuntu:latest
-LABEL authors="dmitriy"
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+COPY uv.lock pyproject.toml ./
+
+RUN uv sync --no-cache
+
+COPY .. .
+CMD ["uv", "run", "app.py"]

@@ -15,6 +15,24 @@ services:
       - infrastructure
       - all
 
+  nats-migrate:
+    build:
+      context: ./nats/
+      dockerfile: Dockerfile
+    command: [ "uv", "run", "migration.py" ]
+    restart: no
+    environment:
+      NATS_URL: "nats://nats:4222"
+    volumes:
+      - ./nats/data:/data
+      - ./nats/nats.conf:/config/nats.conf
+    depends_on:
+      - nats
+    profiles:
+      - without_bot
+      - infrastructure
+      - all
+
   redis:
     image: redis:7.4.2
     container_name: redis
