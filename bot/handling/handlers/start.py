@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.filters import Command
-from aiogram.types import Message, TelegramObject
+from aiogram.types import Message
 from aiogram_dialog import DialogManager, StartMode
 
 from bot.handling.states.main_menu import MainMenuSG

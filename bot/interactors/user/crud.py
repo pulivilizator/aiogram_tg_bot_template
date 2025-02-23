@@ -1,5 +1,3 @@
-from sqlalchemy.exc import NoResultFound
-
 from bot.interactors.base import BaseInteractor
 from bot.core import dto
 from bot.repository import UserRepository, UserSettingsRepository

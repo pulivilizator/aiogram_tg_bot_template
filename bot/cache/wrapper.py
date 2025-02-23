@@ -20,7 +20,6 @@ class FieldWrapper:
 
     async def set(self, value):
         self._parent._data[self._field_name] = value
-        redis_key = self._parent._make_redis_key()
         await self._parent._save_field(self._field_name, value)
 
     def __str__(self):

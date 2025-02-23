@@ -1,4 +1,4 @@
-from typing import Type, Union, Any, Optional, Generic
+from typing import Type, Any, Optional, Generic
 
 from pydantic import BaseModel
 from sqlalchemy import select

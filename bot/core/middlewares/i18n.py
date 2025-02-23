@@ -1,7 +1,7 @@
 from typing import Callable, Any, Awaitable
 
 from aiogram import BaseMiddleware
-from aiogram.types import User, TelegramObject, CallbackQuery, Message
+from aiogram.types import User, TelegramObject, CallbackQuery
 from dishka.integrations.aiogram import FromDishka
 from fluentogram import TranslatorHub
 

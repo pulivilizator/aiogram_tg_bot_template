@@ -49,7 +49,7 @@ class RegisterMiddleware(BaseMiddleware):
                         ),
                     )
                 )
-                await self.logger.info(f"Register new user", new_user=from_user.id)
+                await self.logger.info("Register new user", new_user=from_user.id)
 
             await self.update_cache(cache, user, from_user)
 

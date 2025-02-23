@@ -18,3 +18,8 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0.38",
     "structlog>=25.1.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.9.7",
+]
