@@ -62,7 +62,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
 
     async def create(self, model_data: BaseModel,
                      response_model: Optional[Type[DTOModel]] = None) -> DTOModel:
-        new_model = self._model(**model_data.model_dump())
+        new_model = self._model(**model_data.model_dump(exclude_unset=True))
         self._session.add(new_model)
         await self._session.commit()
         await self._session.refresh(new_model)
