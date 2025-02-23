@@ -7,7 +7,6 @@ from bot.core.enums import Languages
 
 
 class UserDTO(BaseModel):
-    id: Optional[UUID] = None
     telegram_id: int
     is_active: bool
     is_admin: bool
@@ -15,7 +14,7 @@ class UserDTO(BaseModel):
 class UserSettingsDTO(BaseModel):
     id: Optional[UUID] = None
     language: Languages
-    user_id: Optional[UUID]
+    user_id: Optional[int]
 
 class UserWithSettingsDTO(UserDTO):
     settings: UserSettingsDTO
@@ -25,7 +24,7 @@ class CreateUserDTO(BaseModel):
     settings: UserSettingsDTO
 
 class UpdateUserSettingsDTO(BaseModel):
-    id: UUID
     language: Languages
+
 
 

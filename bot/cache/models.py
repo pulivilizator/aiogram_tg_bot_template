@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 from .wrapper import FieldWrapper
-from ..core.enums import Languages
 
 
 class BaseModule(ABC):
@@ -21,7 +20,8 @@ class Settings(BaseModule):
     def __init__(self, parent):
         self._parent = parent
         self._data = {}
-        self.language = FieldWrapper(self, "language", default=Languages.EN)
+        self.language = FieldWrapper(self, "language")
+        self.id = FieldWrapper(self, "id")
 
     async def load(self):
         redis_key = self._make_redis_key()
@@ -34,3 +34,4 @@ class Settings(BaseModule):
     async def _save_field(self, field_name: str, value):
         redis_key = self._make_redis_key()
         await self._parent.redis.hset(redis_key, field_name, value)
+        await self._parent.redis.expire(redis_key, self._parent.ex_time)

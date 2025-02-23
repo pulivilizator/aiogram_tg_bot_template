@@ -4,7 +4,7 @@ from typing import Self, Optional
 from redis.asyncio import Redis
 
 from .models import Settings
-from ..core.enums import CacheLoadModules
+from bot.core.enums import CacheLoadModules
 
 
 class UserCache:
@@ -12,6 +12,7 @@ class UserCache:
         self.user_id = user_id
         self.redis = redis
         self.settings = Settings(self)
+        self.ex_time = 60 * 60 * 6
 
     async def load(self, load_modules: Optional[list[CacheLoadModules]] = None) -> Self:
         if load_modules is None:
@@ -19,3 +20,10 @@ class UserCache:
         tasks = [getattr(self, module).load() for module in load_modules]
         await asyncio.gather(*tasks)
         return self
+
+    def find(self, key):
+        for attr in self.__dict__.values():
+            data = getattr(attr, '_data', None)
+            if isinstance(data, dict) and key in data:
+                return data.get(key)
+

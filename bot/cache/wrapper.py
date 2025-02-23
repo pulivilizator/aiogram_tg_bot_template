@@ -29,3 +29,15 @@ class FieldWrapper:
 
     def __repr__(self):
         return repr(self.get_value())
+
+    def __eq__(self, other):
+        val = self.get_value()
+        if isinstance(other, FieldWrapper):
+            return val == other.get_value()
+        return val == other
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __bool__(self):
+        return bool(self.get_value())

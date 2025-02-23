@@ -36,12 +36,7 @@ class CommonProvider(Provider):
     @provide(scope=Scope.REQUEST)
     async def get_db_session(self, sessionmaker: async_sessionmaker) -> AsyncIterator[AsyncSession]:
         async with sessionmaker() as session:
-            try:
-                yield session
-                await session.commit()
-            except Exception as e:
-                await session.rollback()
-                raise e
+            yield session
 
     @provide(scope=Scope.APP)
     def get_translator_hub(self) -> TranslatorHub:
