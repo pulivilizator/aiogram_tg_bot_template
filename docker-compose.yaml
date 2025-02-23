@@ -1,4 +1,22 @@
+# Profiles
+# 1) all - runs all
+# 2) infrastructure - run only infrastructure
+#
+# Usage `docker compose --profile all up`
+
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: [ "uv", "run", "app.py" ]
+    depends_on:
+      - nats-migrate
+      - postgres
+      - redis
+    profiles:
+      - all
+
   nats:
     image: nats:2.10.24
     restart: on-failure
@@ -11,7 +29,6 @@ services:
       - ./nats/data:/data
       - ./nats/nats.conf:/config/nats.conf
     profiles:
-      - without_bot
       - infrastructure
       - all
 
@@ -29,7 +46,6 @@ services:
     depends_on:
       - nats
     profiles:
-      - without_bot
       - infrastructure
       - all
 
@@ -58,7 +74,6 @@ services:
       timeout: 5s
       retries: 3
     profiles:
-      - without_bot
       - infrastructure
       - all
 
@@ -74,7 +89,6 @@ services:
     volumes:
       - ./database/data:/var/lib/postgresql/data
     profiles:
-      - without_bot
       - infrastructure
       - all
     restart: unless-stopped
