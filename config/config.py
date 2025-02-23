@@ -4,12 +4,14 @@ from pydantic import BaseModel
 from bot.config import BotConfig as TgBotConfig
 from config.models import NatsConfig, RedisConfig
 from database.config import Config as RelationalDatabaseConfig
+from logs.config import Config as LogConfig
 
 class Config(BaseModel):
     bot: TgBotConfig
     db: RelationalDatabaseConfig
     nats: NatsConfig
     redis: RedisConfig
+    logging: LogConfig
 
     class Config:
         alias_generator = str.upper

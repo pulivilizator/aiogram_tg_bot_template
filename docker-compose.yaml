@@ -19,7 +19,7 @@ services:
     build:
       context: ./nats/
       dockerfile: Dockerfile
-    command: [ "uv", "run", "migration.py" ]
+    command: [ "uv", "run", "migrations.py" ]
     restart: no
     environment:
       NATS_URL: "nats://nats:4222"

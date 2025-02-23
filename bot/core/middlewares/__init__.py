@@ -1,0 +1,1 @@
+from .inject_middleware import aiogram_middleware_inject

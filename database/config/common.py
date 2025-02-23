@@ -7,7 +7,7 @@ from database.config.orm import ORMConfig
 
 
 class Config(BaseDBConfig):
-    db_type: SecretStr = SecretStr('postgres')
+    db_type: SecretStr = SecretStr('postgresql')
     db_name: SecretStr
     adapter: Optional[str]
     username: SecretStr
@@ -15,6 +15,8 @@ class Config(BaseDBConfig):
     host: SecretStr # with port
     orm: ORMConfig = ORMConfig()
     timeout: int = 60
+    pool_size: Optional[int] = None
+    max_overflow: Optional[int] = None
 
     @property
     def uri(self) -> str:

@@ -2,5 +2,5 @@
 level = 'info'
 utc = true
 time_format = '%Y-%m-%dT H:%M:%S'
-call_site = false
+call_site = true
 renderer = 'text'

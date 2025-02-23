@@ -7,7 +7,7 @@ from structlog import processors
 from logs.config import Config, LogsRenderer
 
 
-class AsyncBindableLogger(structlog.types.BindableLogger, structlog.stdlib.AsyncBoundLogger):
+class AsyncBindableLogger(structlog.stdlib.AsyncBoundLogger, structlog.types.BindableLogger):
     ...
 
 def startup(config: Config) -> None:
@@ -16,6 +16,7 @@ def startup(config: Config) -> None:
         structlog.processors.add_log_level,
         structlog.processors.StackInfoRenderer(),
         structlog.dev.set_exc_info,
+        structlog.processors.format_exc_info,
         structlog.processors.TimeStamper(fmt=config.time_format, utc=config.utc),
     ]
 
@@ -30,7 +31,7 @@ def startup(config: Config) -> None:
         renderer = structlog.dev.ConsoleRenderer(colors=True)
     elif config.renderer == LogsRenderer.json:
         renderer = processors.JSONRenderer(
-            serializer=lambda data: orjson.dumps(data).decode()
+            serializer=lambda data, **kwargs: orjson.dumps(data).decode()
         )
     else:
         raise ValueError('Logging: Unknown renderer set')
