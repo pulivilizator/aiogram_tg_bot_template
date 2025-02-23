@@ -4,10 +4,11 @@
 
 A template for a Telegram bot that includes:
 - working with a cache (Redis),
-- a database (PostgreSQL, SQLAlchemy),
+- database (PostgreSQL, SQLAlchemy),
 - localization (Fluentogram),
-- a message broker (NATS),
-- Alembic migrations,
+- message broker and custom storage (NATS),
+- alembic migrations,
+- di (dishka)
 - and the bot logic itself on [Aiogram](https://docs.aiogram.dev/).
 
 You can find the full list of dependencies in [`pyproject.toml`](./pyproject.toml).
