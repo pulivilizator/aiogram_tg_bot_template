@@ -6,18 +6,22 @@ from aiogram_dialog import setup_dialogs, StartMode
 from dishka import AsyncContainer
 from dishka.integrations.aiogram import setup_dishka
 
-from bot.core.middlewares import LoggingMiddleware, TranslatorRunnerMiddleware, RegisterMiddleware, \
-    DialogResetMiddleware, DatabaseMiddleware
+from bot.core.middlewares import (
+    LoggingMiddleware,
+    TranslatorRunnerMiddleware,
+    RegisterMiddleware,
+    DialogResetMiddleware,
+    DatabaseMiddleware,
+)
 from bot.handling.dialogs import get_dialogs
 from bot.handling.handlers import get_routers
 from bot.handling.states.main_menu import MainMenuSG
 
-logger = structlog.getLogger('schema')
+logger = structlog.getLogger("schema")
 
 
 async def assemble(
-        dispatcher_factory: Awaitable[Dispatcher],
-        di_container: AsyncContainer
+    dispatcher_factory: Awaitable[Dispatcher], di_container: AsyncContainer
 ) -> Dispatcher:
     dp = await dispatcher_factory
     container = di_container
@@ -27,6 +31,8 @@ async def assemble(
     dp.update.middleware(DatabaseMiddleware())
     dp.update.middleware(RegisterMiddleware())
     dp.update.middleware(TranslatorRunnerMiddleware())
-    dp.update.middleware(DialogResetMiddleware(init_state=MainMenuSG.menu, mode=StartMode.RESET_STACK))
+    dp.update.middleware(
+        DialogResetMiddleware(init_state=MainMenuSG.menu, mode=StartMode.RESET_STACK)
+    )
     dp.include_routers(*get_routers(), *get_dialogs())
     return dp

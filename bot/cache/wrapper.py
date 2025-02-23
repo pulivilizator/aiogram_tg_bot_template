@@ -4,6 +4,7 @@ class FieldWrapper:
     позволяющая читать его как строку/число,
     и вызывать `await .set(...) / .del(...)` для обновления в Redis.
     """
+
     def __init__(self, parent, field_name: str, default=None):
         """
         :param parent: ссылка на родителя (Settings, Profile, или сам UserCache),

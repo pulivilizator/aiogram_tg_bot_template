@@ -1,3 +1,3 @@
 from .entry import NATSFSMStorage
 
-__all__ = ['NATSFSMStorage']
+__all__ = ["NATSFSMStorage"]

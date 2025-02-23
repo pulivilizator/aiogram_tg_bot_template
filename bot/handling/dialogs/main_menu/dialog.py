@@ -9,18 +9,18 @@ from bot.handling.utils.button_checker import SetButtonChecked
 
 dialog = Dialog(
     Window(
-        Format('{start_message}'),
+        Format("{start_message}"),
         Row(
             Radio(
-                checked_text=Format('🔘 {item[1]}'),
-                unchecked_text=Format('⚪️ {item[1]}'),
+                checked_text=Format("🔘 {item[1]}"),
+                unchecked_text=Format("⚪️ {item[1]}"),
                 id=Languages.WIDGET_KEY.value,
                 item_id_getter=lambda x: x[0],
-                items='languages',
+                items="languages",
             ),
         ),
         getter=menu_getter,
-        state=MainMenuSG.menu
+        state=MainMenuSG.menu,
     ),
-    on_start=SetButtonChecked(Languages)
+    on_start=SetButtonChecked(Languages),
 )

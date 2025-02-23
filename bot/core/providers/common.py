@@ -28,13 +28,19 @@ class CommonProvider(Provider):
 
     @provide(scope=Scope.APP)
     def get_sessionmaker(self, config: Config) -> async_sessionmaker:
-        engine = create_async_engine(url=config.db.uri,
-                                     pool_size=config.db.pool_size,
-                                     max_overflow=config.db.max_overflow)
-        return async_sessionmaker(engine, expire_on_commit=False, autoflush=True, class_=AsyncSession)
+        engine = create_async_engine(
+            url=config.db.uri,
+            pool_size=config.db.pool_size,
+            max_overflow=config.db.max_overflow,
+        )
+        return async_sessionmaker(
+            engine, expire_on_commit=False, autoflush=True, class_=AsyncSession
+        )
 
     @provide(scope=Scope.REQUEST)
-    async def get_db_session(self, sessionmaker: async_sessionmaker) -> AsyncIterator[AsyncSession]:
+    async def get_db_session(
+        self, sessionmaker: async_sessionmaker
+    ) -> AsyncIterator[AsyncSession]:
         async with sessionmaker() as session:
             yield session
 

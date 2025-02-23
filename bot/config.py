@@ -14,4 +14,4 @@ class BotConfig(BaseModel):
     fsm: FSM
 
     class Config:
-        extras = 'allow'
+        extras = "allow"

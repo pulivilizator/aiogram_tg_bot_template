@@ -2,6 +2,7 @@ import enum
 
 from pydantic import BaseModel, field_validator
 
+
 class Levels(int, enum.Enum):
     critical = 50
     fatal = 50
@@ -10,38 +11,41 @@ class Levels(int, enum.Enum):
     info = 20
     debug = 10
 
+
 class StringLevels(str, enum.Enum):
-    critical = 'CRITICAL'
-    fatal = 'FATAL'
-    error = 'ERROR'
-    warning = 'WARNING'
-    info = 'INFO'
-    debug = 'DEBUG'
+    critical = "CRITICAL"
+    fatal = "FATAL"
+    error = "ERROR"
+    warning = "WARNING"
+    info = "INFO"
+    debug = "DEBUG"
+
 
 class LogsRenderer(str, enum.Enum):
-    text = 'TEXT'
-    json = 'JSON'
+    text = "TEXT"
+    json = "JSON"
+
 
 class Config(BaseModel):
     level: Levels | StringLevels
-    time_format: str = 'utc'
+    time_format: str = "utc"
     utc: bool = True
-    record_format: str = ''
+    record_format: str = ""
     call_site: bool = True
     renderer: LogsRenderer = LogsRenderer.text
 
-    @field_validator('level', mode='before')
+    @field_validator("level", mode="before")
     def string_level_upper(cls, level: Levels | StringLevels) -> str | int:
         if isinstance(level, str):
             return level.upper()
         return level
 
-    @field_validator('renderer', mode='before')
+    @field_validator("renderer", mode="before")
     def string_renderer_upper(cls, renderer: LogsRenderer) -> str:
         if isinstance(renderer, str):
             return renderer.upper()
         return renderer
 
     class Config:
-        extras = 'allow'
+        extras = "allow"
         use_enum_values = True

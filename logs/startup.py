@@ -7,8 +7,10 @@ from structlog import processors
 from logs.config import Config, LogsRenderer
 
 
-class AsyncBindableLogger(structlog.stdlib.AsyncBoundLogger, structlog.types.BindableLogger):
-    ...
+class AsyncBindableLogger(
+    structlog.stdlib.AsyncBoundLogger, structlog.types.BindableLogger
+): ...
+
 
 def startup(config: Config) -> None:
     pre_chain = [
@@ -21,7 +23,7 @@ def startup(config: Config) -> None:
     ]
 
     handler = logging.StreamHandler()
-    handler.set_name('default')
+    handler.set_name("default")
     handler.setLevel(config.level)
 
     if config.call_site:
@@ -34,18 +36,18 @@ def startup(config: Config) -> None:
             serializer=lambda data, **kwargs: orjson.dumps(data).decode()
         )
     else:
-        raise ValueError('Logging: Unknown renderer set')
+        raise ValueError("Logging: Unknown renderer set")
 
     formatter = structlog.stdlib.ProcessorFormatter(
         processors=[
             structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-            renderer
+            renderer,
         ],
-        foreign_pre_chain=pre_chain
+        foreign_pre_chain=pre_chain,
     )
     handler.setFormatter(formatter)
 
-    logging.basicConfig(handlers=(handler, ), level=config.level)
+    logging.basicConfig(handlers=(handler,), level=config.level)
     structlog.configure(
         processors=[
             *pre_chain,
@@ -53,5 +55,5 @@ def startup(config: Config) -> None:
         ],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=AsyncBindableLogger,
-        cache_logger_on_first_use=True
+        cache_logger_on_first_use=True,
     )

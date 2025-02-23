@@ -10,21 +10,26 @@ from typing_extensions import TypeVar
 
 from bot.repository.interfaces.base import AbstractSQLRepository
 
-ModelType = TypeVar('ModelType', bound=DeclarativeBase)
-DTOModel = TypeVar('DTOModel', bound=BaseModel)
-DTOModelResponse = TypeVar('DTOModelResponse', bound=BaseModel)
+ModelType = TypeVar("ModelType", bound=DeclarativeBase)
+DTOModel = TypeVar("DTOModel", bound=BaseModel)
+DTOModelResponse = TypeVar("DTOModelResponse", bound=BaseModel)
+
 
 class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
-    def __init__(self,
-                 session: AsyncSession,
-                 model: Type[ModelType],
-                 dto_model: Type[DTOModel],
-                 lookup_field: str):
+    def __init__(
+        self,
+        session: AsyncSession,
+        model: Type[ModelType],
+        dto_model: Type[DTOModel],
+        lookup_field: str,
+    ):
         self._session = session
         self._model = model
         self._lookup_field = lookup_field
         self._dto_model = dto_model
-        self.logger = get_logger(__name__).bind(repository=self.__class__.__name__, model=self._model.__name__)
+        self.logger = get_logger(__name__).bind(
+            repository=self.__class__.__name__, model=self._model.__name__
+        )
 
     async def get_instance(self, lookup_value: Any) -> ModelType:
         lookup_field = getattr(self._model, self._lookup_field)
@@ -34,24 +39,27 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         result = await self._session.execute(query)
         instance: ModelType | None = result.scalars().first()
         if instance is None:
-            await self.logger.warning(f"Instance with {lookup_field} == {lookup_value} not found")
-            raise NoResultFound(f"Instance with {lookup_field} == {lookup_value} not found")
+            await self.logger.warning(
+                f"Instance with {lookup_field} == {lookup_value} not found"
+            )
+            raise NoResultFound(
+                f"Instance with {lookup_field} == {lookup_value} not found"
+            )
         return instance
 
-    async def get(self,
-                  lookup_value: Any,
-                  response_model: Optional[Type[DTOModelResponse]] = None,
-                  ) -> DTOModel | DTOModelResponse:
+    async def get(
+        self,
+        lookup_value: Any,
+        response_model: Optional[Type[DTOModelResponse]] = None,
+    ) -> DTOModel | DTOModelResponse:
         instance = await self.get_instance(lookup_value)
         if response_model is None:
             return self._dto_model.model_validate(instance, from_attributes=True)
         return response_model.model_validate(instance, from_attributes=True)
 
-    async def get_or_none(self,
-                          lookup_value: Any,
-                          response_model: Optional[Type[DTOModelResponse]] = None
-                    ) -> DTOModel | DTOModelResponse | None:
-
+    async def get_or_none(
+        self, lookup_value: Any, response_model: Optional[Type[DTOModelResponse]] = None
+    ) -> DTOModel | DTOModelResponse | None:
         try:
             instance = await self.get_instance(lookup_value)
         except NoResultFound:
@@ -61,8 +69,11 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
             return self._dto_model.model_validate(instance, from_attributes=True)
         return response_model.model_validate(instance, from_attributes=True)
 
-    async def create(self, model_data: BaseModel,
-                     response_model: Optional[Type[DTOModelResponse]] = None) -> DTOModel | DTOModelResponse:
+    async def create(
+        self,
+        model_data: BaseModel,
+        response_model: Optional[Type[DTOModelResponse]] = None,
+    ) -> DTOModel | DTOModelResponse:
         new_model = self._model(**model_data.model_dump(exclude_unset=True))
         self._session.add(new_model)
         await self.logger.info(f"Model {model_data} created")
@@ -70,19 +81,23 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
             return self._dto_model.model_validate(new_model, from_attributes=True)
         return response_model.model_validate(new_model, from_attributes=True)
 
-    async def get_or_create(self,
-                            lookup_value: Any,
-                            model_data: BaseModel,
-                            response_model: Optional[Type[DTOModelResponse]] = None) -> DTOModel | DTOModelResponse:
+    async def get_or_create(
+        self,
+        lookup_value: Any,
+        model_data: BaseModel,
+        response_model: Optional[Type[DTOModelResponse]] = None,
+    ) -> DTOModel | DTOModelResponse:
         obj = await self.get_or_none(lookup_value, response_model)
         if obj is None:
             return await self.create(model_data, response_model)
         return obj
 
-
-    async def update(self, lookup_value,
-                     update_data: BaseModel,
-                     response_model: Optional[Type[DTOModelResponse]] = None) -> DTOModel | DTOModelResponse:
+    async def update(
+        self,
+        lookup_value,
+        update_data: BaseModel,
+        response_model: Optional[Type[DTOModelResponse]] = None,
+    ) -> DTOModel | DTOModelResponse:
         obj = await self.get_instance(lookup_value)
         update_dict = update_data.model_dump(exclude_unset=True)
         for key, value in update_dict.items():
@@ -103,13 +118,17 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         await self._session.commit()
         await self.logger.info(f"Model {obj} destroyed")
 
-    async def list(self,
-                   filter_query: Optional[Query] = None,
-                   response_model: Optional[Type[DTOModelResponse]] = None) -> list[DTOModel | DTOModelResponse]:
+    async def list(
+        self,
+        filter_query: Optional[Query] = None,
+        response_model: Optional[Type[DTOModelResponse]] = None,
+    ) -> list[DTOModel | DTOModelResponse]:
         if filter_query is None:
             result = await self._session.execute(select(self._model))
         else:
             result = await self._session.execute(filter_query)
         resp_model = self._dto_model if response_model is None else response_model
-        return [resp_model.model_validate(obj, from_attributes=True)
-                for obj in result.scalars().all()]
+        return [
+            resp_model.model_validate(obj, from_attributes=True)
+            for obj in result.scalars().all()
+        ]

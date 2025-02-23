@@ -23,7 +23,6 @@ class UserCache:
 
     def find(self, key):
         for attr in self.__dict__.values():
-            data = getattr(attr, '_data', None)
+            data = getattr(attr, "_data", None)
             if isinstance(data, dict) and key in data:
                 return data.get(key)
-

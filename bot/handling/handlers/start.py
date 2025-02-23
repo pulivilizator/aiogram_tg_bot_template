@@ -7,6 +7,7 @@ from bot.handling.states.main_menu import MainMenuSG
 
 router = Router()
 
+
 @router.message(Command("start"))
 async def handler(msg: Message, dialog_manager: DialogManager):
     await dialog_manager.start(state=MainMenuSG.menu, mode=StartMode.RESET_STACK)

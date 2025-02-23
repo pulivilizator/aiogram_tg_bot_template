@@ -6,6 +6,7 @@ from config.models import NatsConfig, RedisConfig
 from database.config import Config as RelationalDatabaseConfig
 from logs.config import Config as LogConfig
 
+
 class Config(BaseModel):
     bot: TgBotConfig
     db: RelationalDatabaseConfig
@@ -16,9 +17,10 @@ class Config(BaseModel):
     class Config:
         alias_generator = str.upper
 
+
 def parse_config():
     settings = Dynaconf(
-        envvar_prefix='APP_CONF',
-        settings_files=['settings.toml', '.secrets.toml'],
+        envvar_prefix="APP_CONF",
+        settings_files=["settings.toml", ".secrets.toml"],
     )
     return Config.model_validate(settings.as_dict())

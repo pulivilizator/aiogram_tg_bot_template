@@ -4,6 +4,7 @@ from pydantic import BaseModel, Extra
 
 from database.config.orm.mixin import ORMConfig
 
+
 class Config(BaseModel, ABC):
     orm: ORMConfig = ORMConfig()
 

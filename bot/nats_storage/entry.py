@@ -28,11 +28,11 @@ class NATSFSMStorage(BaseStorage):
     def _key_formatter(key: StorageKey) -> str:
         return (
             (
-                f'{key.bot_id}.{key.user_id}.{key.chat_id}.{key.destiny}'
-                + (f'.{key.thread_id}' if key.thread_id else '')
+                f"{key.bot_id}.{key.user_id}.{key.chat_id}.{key.destiny}"
+                + (f".{key.thread_id}" if key.thread_id else "")
             )
-            .replace(':', '.')
-            .rstrip('.')
+            .replace(":", ".")
+            .rstrip(".")
         )
 
     async def set_state(self, key: StorageKey, state: StateType = None) -> None:
@@ -49,7 +49,9 @@ class NATSFSMStorage(BaseStorage):
         return data
 
     async def set_data(self, key: StorageKey, data: Dict[str, Any]) -> None:
-        await self.kv_data.put(self._key_formatter(key), self.serializer(data) if data else b'')
+        await self.kv_data.put(
+            self._key_formatter(key), self.serializer(data) if data else b""
+        )
 
     async def get_data(self, key: StorageKey) -> Dict[str, Any]:
         try:
@@ -61,5 +63,7 @@ class NATSFSMStorage(BaseStorage):
             return {}
 
     async def close(self) -> None:
-        await asyncio.gather(self.kv_data.purge_deletes(),self.kv_states.purge_deletes())
+        await asyncio.gather(
+            self.kv_data.purge_deletes(), self.kv_states.purge_deletes()
+        )
         return None

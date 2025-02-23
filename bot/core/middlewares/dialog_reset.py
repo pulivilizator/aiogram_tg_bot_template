@@ -20,13 +20,13 @@ class DialogResetMiddleware(BaseMiddleware):
         event: Update,
         data: Dict[str, Any],
     ) -> None:
-        await self.logger.debug('DialogResetMiddleware begun')
+        await self.logger.debug("DialogResetMiddleware begun")
         try:
             await handler(event, data)
         except UnknownIntent:
-            await self.logger.info(f'Unknown intent {type(data)}')
-            manager = data.get('dialog_manager')
+            await self.logger.info(f"Unknown intent {type(data)}")
+            manager = data.get("dialog_manager")
             if manager:
                 await manager.start(self.init_state, mode=self.mode)
             await event.callback_query.answer()
-        await self.logger.debug('DialogResetMiddleware end')
+        await self.logger.debug("DialogResetMiddleware end")

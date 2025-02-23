@@ -6,11 +6,12 @@ import logs
 from bot import bot
 from config import Config, parse_config
 
+
 async def main() -> None:
     config: Config = parse_config()
     logs.startup(config.logging)
     logger = structlog.get_logger(__name__)
-    await logger.info('App is starting, configs parsed successfully')
+    await logger.info("App is starting, configs parsed successfully")
     try:
         await asyncio.gather(
             bot(
@@ -19,11 +20,12 @@ async def main() -> None:
             ),
         )
     except SystemExit:
-        await logger.info('System shutdown')
+        await logger.info("System shutdown")
     except KeyboardInterrupt:
-        await logger.info('Shutdown by external call ( KeyboardInterrupt )')
+        await logger.info("Shutdown by external call ( KeyboardInterrupt )")
     except Exception as e:
-        await logger.exception('Abnormal shutdown detected, critical error happened', e)
+        await logger.exception("Abnormal shutdown detected, critical error happened", e)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     asyncio.run(main())

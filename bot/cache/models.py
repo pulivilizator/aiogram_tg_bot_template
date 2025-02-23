@@ -16,6 +16,7 @@ class BaseModule(ABC):
     async def _save_field(self, field_name: str, value) -> None:
         raise NotImplementedError
 
+
 class Settings(BaseModule):
     def __init__(self, parent):
         self._parent = parent

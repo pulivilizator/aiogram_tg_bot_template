@@ -10,19 +10,18 @@ from bot.core.middlewares import aiogram_middleware_inject
 
 
 class DatabaseMiddleware(BaseMiddleware):
-
     def __init__(
-            self,
+        self,
     ) -> None:
         self.logger = structlog.getLogger()
 
     @aiogram_middleware_inject
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: Dict[str, Any],
-            session: FromDishka[AsyncSession]
+        self,
+        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: Dict[str, Any],
+        session: FromDishka[AsyncSession],
     ) -> None:
         try:
             await handler(event, data)
@@ -31,4 +30,3 @@ class DatabaseMiddleware(BaseMiddleware):
             await self.logger.error("Error during database session", exc_info=e)
             await session.rollback()
             raise e
-
