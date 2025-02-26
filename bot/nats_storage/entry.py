@@ -1,10 +1,11 @@
 import asyncio
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import structlog
 from aiogram.fsm.state import State
 from aiogram.fsm.storage.base import BaseStorage, StateType, StorageKey
+
 from nats.js.errors import KeyNotFoundError, NotFoundError
 from nats.js.kv import KeyValue
 
@@ -48,12 +49,13 @@ class NATSFSMStorage(BaseStorage):
             return None
         return data
 
-    async def set_data(self, key: StorageKey, data: Dict[str, Any]) -> None:
+    async def set_data(self, key: StorageKey, data: dict[str, Any]) -> None:
         await self.kv_data.put(
-            self._key_formatter(key), self.serializer(data) if data else b""
+            self._key_formatter(key),
+            self.serializer(data) if data else b"",
         )
 
-    async def get_data(self, key: StorageKey) -> Dict[str, Any]:
+    async def get_data(self, key: StorageKey) -> dict[str, Any]:
         try:
             entry = await self.kv_data.get(self._key_formatter(key))
             if entry.value is None:
@@ -64,6 +66,7 @@ class NATSFSMStorage(BaseStorage):
 
     async def close(self) -> None:
         await asyncio.gather(
-            self.kv_data.purge_deletes(), self.kv_states.purge_deletes()
+            self.kv_data.purge_deletes(),
+            self.kv_states.purge_deletes(),
         )
         return None

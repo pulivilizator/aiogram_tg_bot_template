@@ -1,15 +1,17 @@
-from typing import Callable, Any, Awaitable
+from collections.abc import Awaitable
+from typing import Any, Callable
 
 from aiogram import BaseMiddleware
-from aiogram.types import User, TelegramObject, CallbackQuery
+from aiogram.types import CallbackQuery, TelegramObject, User
 from dishka.integrations.aiogram import FromDishka
 from fluentogram import TranslatorHub
 
+from bot.cache import UserCache
 from bot.core import dto
 from bot.core.enums import Languages
+from bot.interactors.user import UpdateUserSettingsInteractor
+
 from .inject import aiogram_middleware_inject
-from ...cache import UserCache
-from ...interactors.user import UpdateUserSettingsInteractor
 
 
 class TranslatorRunnerMiddleware(BaseMiddleware):

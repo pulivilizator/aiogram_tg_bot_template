@@ -1,5 +1,5 @@
 from aiogram_dialog import Dialog, Window
-from aiogram_dialog.widgets.kbd import Row, Radio
+from aiogram_dialog.widgets.kbd import Radio, Row
 from aiogram_dialog.widgets.text import Format
 
 from bot.core.enums import Languages

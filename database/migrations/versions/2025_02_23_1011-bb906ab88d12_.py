@@ -6,11 +6,11 @@ Create Date: 2025-02-23 10:11:45.099205
 
 """
 
-from typing import Sequence, Union
+from collections.abc import Sequence
+from typing import Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "bb906ab88d12"
@@ -38,7 +38,10 @@ def upgrade() -> None:
     op.create_table(
         "users_settings",
         sa.Column(
-            "id", sa.Uuid(), server_default=sa.text("gen_random_uuid()"), nullable=False
+            "id",
+            sa.Uuid(),
+            server_default=sa.text("gen_random_uuid()"),
+            nullable=False,
         ),
         sa.Column(
             "language",

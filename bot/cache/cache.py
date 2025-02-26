@@ -1,10 +1,11 @@
 import asyncio
-from typing import Self, Optional
+from typing import Optional, Self
 
 from redis.asyncio import Redis
 
-from .models import Settings
 from bot.core.enums import CacheLoadModules
+
+from .models import Settings
 
 
 class UserCache:

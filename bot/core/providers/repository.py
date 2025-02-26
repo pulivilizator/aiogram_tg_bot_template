@@ -1,4 +1,4 @@
-from dishka import Provider, provide, Scope
+from dishka import Provider, Scope, provide
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.core import dto
@@ -18,7 +18,8 @@ class RepositoryProvider(Provider):
 
     @provide(scope=Scope.REQUEST)
     def get_user_settings_repository(
-        self, session: AsyncSession
+        self,
+        session: AsyncSession,
     ) -> UserSettingsRepository:
         return UserSettingsRepository(
             session=session,

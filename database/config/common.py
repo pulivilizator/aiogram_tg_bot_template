@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import SecretStr, Extra
+from pydantic import Extra, SecretStr
 
 from database.config.base import Config as BaseDBConfig
 from database.config.orm import ORMConfig

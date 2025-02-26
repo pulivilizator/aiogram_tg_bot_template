@@ -1,13 +1,13 @@
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.types import TelegramObject
 from aiohttp import ClientSession
-from dishka import Provider, provide, Scope, from_context
+from dishka import Provider, Scope, from_context, provide
 from fluentogram import TranslatorHub
 from orjson import orjson
 from redis.asyncio import Redis
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from config import Config, parse_config
 from i18n.factory import i18n_factory
@@ -34,12 +34,16 @@ class CommonProvider(Provider):
             max_overflow=config.db.max_overflow,
         )
         return async_sessionmaker(
-            engine, expire_on_commit=False, autoflush=True, class_=AsyncSession
+            engine,
+            expire_on_commit=False,
+            autoflush=True,
+            class_=AsyncSession,
         )
 
     @provide(scope=Scope.REQUEST)
     async def get_db_session(
-        self, sessionmaker: async_sessionmaker
+        self,
+        sessionmaker: async_sessionmaker,
     ) -> AsyncIterator[AsyncSession]:
         async with sessionmaker() as session:
             yield session

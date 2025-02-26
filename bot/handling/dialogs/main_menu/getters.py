@@ -10,7 +10,9 @@ if TYPE_CHECKING:
 
 
 async def menu_getter(
-    dialog_manager: DialogManager, i18n: TranslatorRunner, **kwargs
+    dialog_manager: DialogManager,
+    i18n: TranslatorRunner,
+    **kwargs,
 ) -> dict[str, tuple | str]:
     return {
         "start_message": i18n.main_menu.start_message(),

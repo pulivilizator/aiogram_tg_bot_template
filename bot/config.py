@@ -1,4 +1,4 @@
-from pydantic import BaseModel, SecretStr, Extra
+from pydantic import BaseModel, Extra, SecretStr
 
 
 class FSM(BaseModel):

@@ -1,15 +1,17 @@
-from typing import Callable, Any, Awaitable
+from collections.abc import Awaitable
+from typing import Any, Callable
 
 import structlog
 from aiogram import BaseMiddleware
-from aiogram.types import User, TelegramObject, Message
+from aiogram.types import Message, TelegramObject, User
 from dishka.integrations.aiogram import FromDishka
 
-from bot.core import dto
-from .inject import aiogram_middleware_inject
 from bot.cache import UserCache
-from bot.interactors.user import GetUserInteractor, CreateUserInteractor
+from bot.core import dto
 from bot.core.enums import Languages
+from bot.interactors.user import CreateUserInteractor, GetUserInteractor
+
+from .inject import aiogram_middleware_inject
 
 
 class RegisterMiddleware(BaseMiddleware):
@@ -27,7 +29,9 @@ class RegisterMiddleware(BaseMiddleware):
         cache: FromDishka[UserCache],
     ) -> Any:
         from_user: User | None = getattr(event, "from_user", None) or getattr(
-            event, "event_from_user", None
+            event,
+            "event_from_user",
+            None,
         )
         if from_user is None:
             message: Message | None = getattr(event, "message", None)
@@ -52,7 +56,7 @@ class RegisterMiddleware(BaseMiddleware):
                             else Languages.EN,
                             user_id=from_user.id,
                         ),
-                    )
+                    ),
                 )
                 await self.logger.info("Register new user", new_user=from_user.id)
 
@@ -62,9 +66,11 @@ class RegisterMiddleware(BaseMiddleware):
 
     @staticmethod
     async def update_cache(
-        cache: UserCache, db_user: dto.UserWithSettingsDTO, tg_user: User
+        cache: UserCache,
+        db_user: dto.UserWithSettingsDTO,
+        tg_user: User,
     ):
         await cache.settings.id.set(str(db_user.settings.id))
         await cache.settings.language.set(
-            Languages.RU if tg_user.language_code == Languages.RU else Languages.EN
+            Languages.RU if tg_user.language_code == Languages.RU else Languages.EN,
         )

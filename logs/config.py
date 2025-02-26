@@ -35,13 +35,13 @@ class Config(BaseModel):
     renderer: LogsRenderer = LogsRenderer.text
 
     @field_validator("level", mode="before")
-    def string_level_upper(cls, level: Levels | StringLevels) -> str | int:
+    def string_level_upper(cls, level: Levels | StringLevels) -> str | int:  # noqa #N805
         if isinstance(level, str):
             return level.upper()
         return level
 
     @field_validator("renderer", mode="before")
-    def string_renderer_upper(cls, renderer: LogsRenderer) -> str:
+    def string_renderer_upper(cls, renderer: LogsRenderer) -> str:  # noqa #N805
         if isinstance(renderer, str):
             return renderer.upper()
         return renderer

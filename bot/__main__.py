@@ -1,18 +1,19 @@
 import asyncio
-from typing import Callable, Awaitable
+from collections.abc import Awaitable
+from typing import Callable
 
-import nats
 import structlog
-from aiogram import Dispatcher, Bot
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
-from dishka import make_async_container, AsyncContainer
-from nats.js.kv import KeyValue
+from dishka import AsyncContainer, make_async_container
 from orjson import orjson
 
+import nats
 from bot.config import BotConfig
 from bot.handling import schema
 from bot.nats_storage import NATSFSMStorage
+from nats.js.kv import KeyValue
 
 
 def bot_factory(config: BotConfig) -> Bot:
@@ -25,8 +26,11 @@ def bot_factory(config: BotConfig) -> Bot:
 async def dispatcher_factory(kv_states: KeyValue, kv_data: KeyValue) -> Dispatcher:
     return Dispatcher(
         storage=NATSFSMStorage(
-            kv_states, kv_data, serializer=orjson.dumps, deserializer=orjson.loads
-        )
+            kv_states,
+            kv_data,
+            serializer=orjson.dumps,
+            deserializer=orjson.loads,
+        ),
     )
 
 
@@ -41,7 +45,8 @@ async def main(
     nats_address: str,
     _bot_factory: Callable[[BotConfig], Bot] = bot_factory,
     _dispatcher_factory: Callable[
-        [KeyValue, KeyValue], Awaitable[Dispatcher]
+        [KeyValue, KeyValue],
+        Awaitable[Dispatcher],
     ] = dispatcher_factory,
     _di_container_factory: Callable[[], AsyncContainer] = dishka_container_factory,
 ) -> None:
@@ -57,7 +62,8 @@ async def main(
     await logger.debug("Bot and KV FSM buckets initialized")
 
     dp = await schema.assemble(
-        _dispatcher_factory(kv_states, kv_data), _di_container_factory()
+        _dispatcher_factory(kv_states, kv_data),
+        _di_container_factory(),
     )
 
     bot_representation = await bot.me()

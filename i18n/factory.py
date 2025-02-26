@@ -1,5 +1,5 @@
 from fluent_compiler.bundle import FluentBundle
-from fluentogram import TranslatorHub, FluentTranslator
+from fluentogram import FluentTranslator, TranslatorHub
 
 DIR_PATH = "i18n/locales"
 
@@ -11,13 +11,15 @@ def i18n_factory():
             FluentTranslator(
                 locale="ru",
                 translator=FluentBundle.from_files(
-                    locale="ru", filenames=[f"{DIR_PATH}/ru/LC_MESSAGES/txt.ftl"]
+                    locale="ru",
+                    filenames=[f"{DIR_PATH}/ru/LC_MESSAGES/txt.ftl"],
                 ),
             ),
             FluentTranslator(
                 locale="en",
                 translator=FluentBundle.from_files(
-                    locale="en", filenames=[f"{DIR_PATH}/en/LC_MESSAGES/txt.ftl"]
+                    locale="en",
+                    filenames=[f"{DIR_PATH}/en/LC_MESSAGES/txt.ftl"],
                 ),
             ),
         ],

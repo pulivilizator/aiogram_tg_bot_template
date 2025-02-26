@@ -23,7 +23,7 @@ async def main() -> None:
         await logger.info("System shutdown")
     except KeyboardInterrupt:
         await logger.info("Shutdown by external call ( KeyboardInterrupt )")
-    except Exception as e:
+    except Exception as e:  # noqa #BLE001
         await logger.exception("Abnormal shutdown detected, critical error happened", e)
 
 

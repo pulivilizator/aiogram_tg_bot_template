@@ -1,5 +1,5 @@
 from .engine import EngineConfig
-from .session import SessionConfig
 from .mixin import ORMConfig
+from .session import SessionConfig
 
 __all__ = ["EngineConfig", "SessionConfig", "ORMConfig"]

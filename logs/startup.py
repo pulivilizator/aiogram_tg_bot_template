@@ -8,7 +8,8 @@ from logs.config import Config, LogsRenderer
 
 
 class AsyncBindableLogger(
-    structlog.stdlib.AsyncBoundLogger, structlog.types.BindableLogger
+    structlog.stdlib.AsyncBoundLogger,
+    structlog.types.BindableLogger,
 ): ...
 
 
@@ -33,7 +34,7 @@ def startup(config: Config) -> None:
         renderer = structlog.dev.ConsoleRenderer(colors=True)
     elif config.renderer == LogsRenderer.json:
         renderer = processors.JSONRenderer(
-            serializer=lambda data, **kwargs: orjson.dumps(data).decode()
+            serializer=lambda data, **kwargs: orjson.dumps(data).decode(),
         )
     else:
         raise ValueError("Logging: Unknown renderer set")

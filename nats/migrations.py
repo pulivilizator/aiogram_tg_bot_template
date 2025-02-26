@@ -1,8 +1,9 @@
 import asyncio
 import os
 
-import nats
 import structlog
+
+import nats
 from nats.js.api import KeyValueConfig
 
 

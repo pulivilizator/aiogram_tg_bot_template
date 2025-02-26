@@ -1,5 +1,6 @@
+from collections.abc import Awaitable
 from datetime import datetime
-from typing import Any, Awaitable, Callable, Dict
+from typing import Any, Callable
 
 import structlog
 from aiogram import BaseMiddleware
@@ -12,9 +13,9 @@ class LoggingMiddleware(BaseMiddleware):
 
     async def __call__(
         self,
-        handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
+        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         event: TelegramObject,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ) -> None:
         start_time = datetime.now()
         structlog.contextvars.bind_contextvars(
@@ -27,7 +28,7 @@ class LoggingMiddleware(BaseMiddleware):
         )
         try:
             await handler(event, data)
-        except Exception as e:
+        except Exception as e:  # noqa #BLE001
             end_time = datetime.now()
             await self.logger.exception(
                 "Abnormal handling event detected, critical error happened",
@@ -40,7 +41,7 @@ class LoggingMiddleware(BaseMiddleware):
             end_time = datetime.now()
             execution_time = end_time - start_time
             await self.logger.info(
-                f"Event successfully executed in {execution_time.microseconds} microseconds",
+                f"Event successfully executed in {execution_time.microseconds} microseconds",  # noqa#E501
                 execution_time=execution_time,
             )
         finally:

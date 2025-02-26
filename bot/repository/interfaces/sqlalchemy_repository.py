@@ -1,4 +1,4 @@
-from typing import Type, Any, Optional, Generic
+from typing import Any, Generic, Optional
 
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -19,8 +19,8 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     def __init__(
         self,
         session: AsyncSession,
-        model: Type[ModelType],
-        dto_model: Type[DTOModel],
+        model: type[ModelType],
+        dto_model: type[DTOModel],
         lookup_field: str,
     ):
         self._session = session
@@ -28,7 +28,8 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         self._lookup_field = lookup_field
         self._dto_model = dto_model
         self.logger = get_logger(__name__).bind(
-            repository=self.__class__.__name__, model=self._model.__name__
+            repository=self.__class__.__name__,
+            model=self._model.__name__,
         )
 
     async def get_instance(self, lookup_value: Any) -> ModelType:
@@ -40,17 +41,17 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         instance: ModelType | None = result.scalars().first()
         if instance is None:
             await self.logger.warning(
-                f"Instance with {lookup_field} == {lookup_value} not found"
+                f"Instance with {lookup_field} == {lookup_value} not found",
             )
             raise NoResultFound(
-                f"Instance with {lookup_field} == {lookup_value} not found"
+                f"Instance with {lookup_field} == {lookup_value} not found",
             )
         return instance
 
     async def get(
         self,
         lookup_value: Any,
-        response_model: Optional[Type[DTOModelResponse]] = None,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse:
         instance = await self.get_instance(lookup_value)
         if response_model is None:
@@ -58,7 +59,9 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         return response_model.model_validate(instance, from_attributes=True)
 
     async def get_or_none(
-        self, lookup_value: Any, response_model: Optional[Type[DTOModelResponse]] = None
+        self,
+        lookup_value: Any,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse | None:
         try:
             instance = await self.get_instance(lookup_value)
@@ -72,7 +75,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     async def create(
         self,
         model_data: BaseModel,
-        response_model: Optional[Type[DTOModelResponse]] = None,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse:
         new_model = self._model(**model_data.model_dump(exclude_unset=True))
         self._session.add(new_model)
@@ -85,7 +88,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         self,
         lookup_value: Any,
         model_data: BaseModel,
-        response_model: Optional[Type[DTOModelResponse]] = None,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse:
         obj = await self.get_or_none(lookup_value, response_model)
         if obj is None:
@@ -96,7 +99,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         self,
         lookup_value,
         update_data: BaseModel,
-        response_model: Optional[Type[DTOModelResponse]] = None,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse:
         obj = await self.get_instance(lookup_value)
         update_dict = update_data.model_dump(exclude_unset=True)
@@ -121,7 +124,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     async def list(
         self,
         filter_query: Optional[Query] = None,
-        response_model: Optional[Type[DTOModelResponse]] = None,
+        response_model: Optional[type[DTOModelResponse]] = None,
     ) -> list[DTOModel | DTOModelResponse]:
         if filter_query is None:
             result = await self._session.execute(select(self._model))
