@@ -7,6 +7,10 @@ venv/
 /nats/data/
 /redis-data/
 /database/data/
+
 .DS_Store/
 __pycache__/
+dist
+
 .ruff_cache
+.mypy_cache
