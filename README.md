@@ -10,6 +10,7 @@ A template for a Telegram bot that includes:
 - alembic migrations,
 - di (dishka)
 - and the bot logic itself on [Aiogram](https://docs.aiogram.dev/).
+- [Ruff](https://docs.astral.sh/ruff/) is used as the linter
 
 You can find the full list of dependencies in [`pyproject.toml`](./pyproject.toml).
 
