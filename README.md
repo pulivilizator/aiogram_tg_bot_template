@@ -60,5 +60,6 @@ You can find the full list of dependencies in [`pyproject.toml`](./pyproject.tom
 ├── app.py                # Entry point
 ├── docker-compose.yaml   # Docker Compose configuration
 ├── alembic.ini           # Alembic configuration
+├── ruff.toml             # Ruff configuration
 └── pyproject.toml        # Dependencies (uv)
 ```
