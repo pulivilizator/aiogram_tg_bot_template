@@ -1,0 +1,37 @@
+line-length = 89
+indent-width = 4
+
+exclude = [
+    "*.pyi"
+]
+
+[lint]
+select = [
+    "C4",     # flake8-comprehensions
+    "A",      # flake8-builtins
+    "COM",    # flake8-commas
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "S",      # flake8-bandit
+    "ASYNC",  # flake8-async
+    "BLE",    # flake8-blind-except
+    "FBT",    # flake8-boolean-trap
+    "PT",     # flake8-pytest-style
+    "SLOT",   # flake8-slots
+    "PTH",    # flake8-use-pathlib
+    "I",      # isort
+    "N",      # pep8-naming
+    "ERA",    # eradicate
+    "E",      # pycodestyle
+    "F",      # pyflakes
+    "UP",     # pyupgrade
+    "C90",     # mccabe
+    "RUF016",
+]
+
+ignore = [
+    "COM812",
+]
+
+[format]
+indent-style = "space"
