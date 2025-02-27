@@ -4,7 +4,7 @@ from fluentogram import FluentTranslator, TranslatorHub
 DIR_PATH = "i18n/locales"
 
 
-def i18n_factory():
+def i18n_factory() -> TranslatorHub:
     return TranslatorHub(
         locales_map={"ru": ("ru", "en"), "en": "en"},
         translators=[

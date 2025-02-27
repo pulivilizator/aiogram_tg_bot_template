@@ -1,4 +1,4 @@
-from aiogram.types import CallbackQuery, Message, TelegramObject, User
+from aiogram.types import TelegramObject, User
 from dishka import Provider, Scope, from_context, provide
 from redis.asyncio import Redis
 

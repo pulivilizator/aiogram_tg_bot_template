@@ -22,7 +22,7 @@ class CommonProvider(Provider):
 
     @provide(scope=Scope.APP)
     async def get_redis(self, config: Config) -> AsyncIterator[Redis]:
-        r = Redis.from_url(config.redis.dsn.unicode_string())
+        r = Redis.from_url(config.redis.dsn.unicode_string(), decode_responses=True)
         yield r
         await r.close()
 
