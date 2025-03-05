@@ -26,20 +26,18 @@ class TranslatorRunnerMiddleware(BaseMiddleware):
         user_settings_update: FromDishka[UpdateUserSettingsInteractor],
     ) -> Any:
         cb: CallbackQuery | None = getattr(event, "callback_query", None)
-        from_user: User | None = getattr(cb, "from_user", None)
 
-        lang = await self._get_lang(cb, from_user, cache, user_settings_update)
+        lang = await self._get_lang(cb, cache, user_settings_update)
         data["i18n"] = hub.get_translator_by_locale(lang)
         return await handler(event, data)
 
     @staticmethod
     async def _get_lang(
-        cb: CallbackQuery,
-        user: User,
+        cb: CallbackQuery | None,
         cache: UserCache,
         update_settings: UpdateUserSettingsInteractor,
     ) -> str:
-        if cb and Languages.WIDGET_KEY in cb.data:
+        if cb and cb.data and Languages.WIDGET_KEY in cb.data:
             lang = (
                 Languages.RU if cb.data.split(":")[1] == Languages.RU else Languages.EN
             )

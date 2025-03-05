@@ -3,7 +3,7 @@ from dishka import Provider, Scope, from_context, provide
 from redis.asyncio import Redis
 
 from bot.cache import UserCache
-from .protocols import HasFromUser, HasEvent
+from bot.core.protocols import HasFromUser, HasEvent
 
 
 class CacheProvider(Provider):

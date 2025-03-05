@@ -29,5 +29,6 @@ class DialogResetMiddleware(BaseMiddleware):
             manager = data.get("dialog_manager")
             if manager:
                 await manager.start(self.init_state, mode=self.mode)
-            await event.callback_query.answer()
+            if event.callback_query is not None:
+                await event.callback_query.answer()
         await self.logger.debug("DialogResetMiddleware end")

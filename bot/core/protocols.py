@@ -8,5 +8,9 @@ class HasFromUser(Protocol):
     from_user: User
 
 @runtime_checkable
+class HasEventFromUser(Protocol):
+    event_from_user: User
+
+@runtime_checkable
 class HasEvent(Protocol):
     event: HasFromUser

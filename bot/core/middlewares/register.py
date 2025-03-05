@@ -12,6 +12,7 @@ from bot.core.enums import Languages
 from bot.interactors.user import CreateUserInteractor, GetUserInteractor
 
 from .inject import aiogram_middleware_inject
+from ..protocols import HasFromUser, HasEvent, HasEventFromUser
 
 
 class RegisterMiddleware(BaseMiddleware):
@@ -28,15 +29,12 @@ class RegisterMiddleware(BaseMiddleware):
         create_user: FromDishka[CreateUserInteractor],
         cache: FromDishka[UserCache],
     ) -> Any:
-        from_user: User | None = getattr(event, "from_user", None) or getattr(
-            event,
-            "event_from_user",
-            None,
-        )
-        if from_user is None:
-            message: Message | None = getattr(event, "message", None)
-            if message:
-                from_user: User | None = getattr(message, "from_user", None)
+        from_user: User | None = None
+        if isinstance(event, (HasFromUser, HasEventFromUser)):
+            from_user = getattr(event, 'from_user', None) or getattr(event, 'event_from_user', None)
+        elif isinstance(event, HasEvent):
+            from_user = event.event.from_user
+
         if from_user is None:
             return await handler(event, data)
 
@@ -69,7 +67,7 @@ class RegisterMiddleware(BaseMiddleware):
         cache: UserCache,
         db_user: dto.UserWithSettingsDTO,
         tg_user: User,
-    ):
+    ) -> None:
         await cache.settings.id.set(str(db_user.settings.id))
         await cache.settings.language.set(
             Languages.RU if tg_user.language_code == Languages.RU else Languages.EN,
