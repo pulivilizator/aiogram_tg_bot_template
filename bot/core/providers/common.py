@@ -5,7 +5,7 @@ from aiogram.types import TelegramObject
 from aiohttp import ClientSession
 from dishka import Provider, Scope, from_context, provide
 from fluentogram import TranslatorHub
-from orjson import orjson
+import orjson
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 

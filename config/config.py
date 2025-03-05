@@ -18,7 +18,7 @@ class Config(BaseModel):
         alias_generator = str.upper
 
 
-def parse_config():
+def parse_config() -> Config:
     settings = Dynaconf(
         envvar_prefix="APP_CONF",
         settings_files=["settings.toml", ".secrets.toml"],
