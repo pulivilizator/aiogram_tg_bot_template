@@ -3,7 +3,7 @@ from typing import Any, Callable
 
 import structlog
 from aiogram import BaseMiddleware
-from aiogram.types import Message, TelegramObject, User
+from aiogram.types import TelegramObject, User
 from dishka.integrations.aiogram import FromDishka
 
 from bot.cache import UserCache
@@ -11,8 +11,8 @@ from bot.core import dto
 from bot.core.enums import Languages
 from bot.interactors.user import CreateUserInteractor, GetUserInteractor
 
+from bot.core.protocols import HasEvent, HasEventFromUser, HasFromUser
 from .inject import aiogram_middleware_inject
-from ..protocols import HasFromUser, HasEvent, HasEventFromUser
 
 
 class RegisterMiddleware(BaseMiddleware):
@@ -31,7 +31,8 @@ class RegisterMiddleware(BaseMiddleware):
     ) -> Any:
         from_user: User | None = None
         if isinstance(event, (HasFromUser, HasEventFromUser)):
-            from_user = getattr(event, 'from_user', None) or getattr(event, 'event_from_user', None)
+            from_user = getattr(event, "from_user", None) or getattr(event, "event_from_user", None)
+
         elif isinstance(event, HasEvent):
             from_user = event.event.from_user
 

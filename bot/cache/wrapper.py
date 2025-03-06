@@ -11,10 +11,10 @@ class FieldWrapper:
     """
 
     def __init__(
-            self,
-            parent: BaseModule,
-            field_name: str,
-            default: Optional[str | int] = None,
+        self,
+        parent: BaseModule,
+        field_name: str,
+        default: Optional[str | int] = None,
     ) -> None:
         """
         parent: ссылка на родителя (Settings, Profile, или сам UserCache),
@@ -26,7 +26,7 @@ class FieldWrapper:
         self._field_name = field_name
         self._default = default
 
-    def get_value(self) -> Optional[str| int]:
+    def get_value(self) -> Optional[str | int]:
         return self._parent.data.get(self._field_name, self._default)
 
     async def set(self, value: str | int) -> None:

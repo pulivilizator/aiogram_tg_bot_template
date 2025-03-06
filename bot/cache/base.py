@@ -9,6 +9,7 @@ from bot.core.enums import CacheLoadModules
 
 DATA_TYPE: TypeAlias = dict[str, str | int]
 
+
 class BaseCache(ABC):
     redis: Redis[str]
     ex_time: int | None
@@ -21,8 +22,10 @@ class BaseCache(ABC):
     def find(self, key: str) -> str | int | None:
         raise NotImplementedError
 
+
 class BaseUserCache(BaseCache, ABC):
     user_id: int | str
+
 
 class BaseModule(ABC):
     _data: DATA_TYPE

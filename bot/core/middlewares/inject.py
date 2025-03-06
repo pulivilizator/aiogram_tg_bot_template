@@ -1,9 +1,10 @@
-from typing import TypeVar, ParamSpec, Callable
+from typing import Callable, ParamSpec, TypeVar
 
 from dishka.integrations.base import wrap_injection
 
 T = TypeVar("T")
 P = ParamSpec("P")
+
 
 def aiogram_middleware_inject(func: Callable[P, T]) -> Callable[P, T]:
     return wrap_injection(

@@ -15,9 +15,7 @@ class Settings(BaseModule):
         redis_key = self._make_redis_key()
         raw_data = await self._parent.redis.hgetall(redis_key)
 
-        self._data = {
-            k: int(v) if v.isdigit() else v for k, v in raw_data.items()
-        }
+        self._data = {k: int(v) if v.isdigit() else v for k, v in raw_data.items()}
 
     def _make_redis_key(self) -> str:
         return f"user:{self._parent.user_id}:settings"

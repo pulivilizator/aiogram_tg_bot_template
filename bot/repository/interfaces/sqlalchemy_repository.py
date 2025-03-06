@@ -132,6 +132,5 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
             result = await self._session.execute(filter_query)
         resp_model = self._dto_model if response_model is None else response_model
         return [
-            resp_model.model_validate(obj, from_attributes=True)
-            for obj in result.scalars().all()
+            resp_model.model_validate(obj, from_attributes=True) for obj in result.scalars().all()
         ]

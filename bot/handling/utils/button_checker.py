@@ -1,5 +1,6 @@
 import asyncio
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.common import ManagedWidget
@@ -28,7 +29,9 @@ class SetButtonChecked:
             cache=cache,
         )
 
-    async def _set_checked(self, cache: UserCache, dialog_manager: DialogManager, key: WidgetEnum) -> None:
+    async def _set_checked(
+        self, cache: UserCache, dialog_manager: DialogManager, key: WidgetEnum
+    ) -> None:
         user_value = str(cache.find(key.WIDGET_KEY))
         widget: ManagedWidget[Any] | None = dialog_manager.find(key.WIDGET_KEY)
         if widget:

@@ -2,12 +2,12 @@ import asyncio
 from collections.abc import Awaitable
 from typing import Callable
 
+import orjson
 import structlog
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from dishka import AsyncContainer, make_async_container
-from orjson import orjson
 
 import nats
 from bot.config import BotConfig

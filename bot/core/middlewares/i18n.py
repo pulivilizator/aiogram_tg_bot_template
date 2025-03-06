@@ -2,7 +2,7 @@ from collections.abc import Awaitable
 from typing import Any, Callable
 
 from aiogram import BaseMiddleware
-from aiogram.types import CallbackQuery, TelegramObject, User
+from aiogram.types import CallbackQuery, TelegramObject
 from dishka.integrations.aiogram import FromDishka
 from fluentogram import TranslatorHub
 
@@ -38,9 +38,7 @@ class TranslatorRunnerMiddleware(BaseMiddleware):
         update_settings: UpdateUserSettingsInteractor,
     ) -> str:
         if cb and cb.data and Languages.WIDGET_KEY in cb.data:
-            lang = (
-                Languages.RU if cb.data.split(":")[1] == Languages.RU else Languages.EN
-            )
+            lang = Languages.RU if cb.data.split(":")[1] == Languages.RU else Languages.EN
             await cache.settings.language.set(lang)
             await update_settings.execute(
                 settings_id=str(cache.settings.id),
