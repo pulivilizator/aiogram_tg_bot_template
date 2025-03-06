@@ -1,4 +1,4 @@
-from typing import Any, Generic, Optional
+from typing import Any, Generic, Optional, overload, Type
 
 from pydantic import BaseModel
 from sqlalchemy import select
@@ -97,7 +97,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
 
     async def update(
         self,
-        lookup_value,
+        lookup_value: Any,
         update_data: BaseModel,
         response_model: Optional[type[DTOModelResponse]] = None,
     ) -> DTOModel | DTOModelResponse:
@@ -115,7 +115,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
             return self._dto_model.model_validate(obj, from_attributes=True)
         return response_model.model_validate(obj, from_attributes=True)
 
-    async def destroy(self, lookup_value) -> None:
+    async def destroy(self, lookup_value: Any) -> None:
         obj = await self.get_instance(lookup_value)
         await self._session.delete(obj)
         await self._session.commit()
@@ -123,7 +123,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
 
     async def list(
         self,
-        filter_query: Optional[Query] = None,
+        filter_query: Optional[Query[Any]] = None,
         response_model: Optional[type[DTOModelResponse]] = None,
     ) -> list[DTOModel | DTOModelResponse]:
         if filter_query is None:
