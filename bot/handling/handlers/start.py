@@ -9,5 +9,5 @@ router = Router()
 
 
 @router.message(Command("start"))
-async def handler(msg: Message, dialog_manager: DialogManager):
+async def handler(msg: Message, dialog_manager: DialogManager) -> None:
     await dialog_manager.start(state=MainMenuSG.menu, mode=StartMode.RESET_STACK)

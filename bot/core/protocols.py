@@ -1,4 +1,4 @@
-from typing import runtime_checkable, Protocol
+from typing import runtime_checkable, Protocol, ReadOnly, Final
 
 from aiogram.types import User
 
@@ -14,3 +14,8 @@ class HasEventFromUser(Protocol):
 @runtime_checkable
 class HasEvent(Protocol):
     event: HasFromUser
+
+class WidgetEnum(Protocol):
+    @property
+    def WIDGET_KEY(self) -> str:
+        pass

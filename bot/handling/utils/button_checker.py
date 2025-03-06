@@ -1,6 +1,5 @@
 import asyncio
-from enum import StrEnum
-from typing import Any
+from typing import Any, Iterable
 
 from aiogram_dialog import DialogManager
 from aiogram_dialog.widgets.common import ManagedWidget
@@ -8,10 +7,11 @@ from dishka import FromDishka
 from dishka.integrations.aiogram_dialog import inject
 
 from bot.cache import UserCache
+from bot.core.protocols import WidgetEnum
 
 
 class SetButtonChecked:
-    def __init__(self, *keys: StrEnum):
+    def __init__(self, *keys: WidgetEnum):
         self._keys = keys
 
     @inject
@@ -20,7 +20,7 @@ class SetButtonChecked:
         _: Any,
         dialog_manager: DialogManager,
         cache: FromDishka[UserCache],
-    ):
+    ) -> None:
         await self._set_default_buttons(
             _,
             dialog_manager=dialog_manager,
@@ -28,18 +28,19 @@ class SetButtonChecked:
             cache=cache,
         )
 
-    async def _set_checked(self, cache: UserCache, dialog_manager: DialogManager, key):
+    async def _set_checked(self, cache: UserCache, dialog_manager: DialogManager, key: WidgetEnum) -> None:
         user_value = str(cache.find(key.WIDGET_KEY))
-        widget: ManagedWidget = dialog_manager.find(key.WIDGET_KEY)
-        await widget.set_checked(user_value)
+        widget: ManagedWidget[Any] | None = dialog_manager.find(key.WIDGET_KEY)
+        if widget:
+            await widget.set_checked(user_value)
 
     async def _set_default_buttons(
         self,
-        _,
+        _: Any,
         dialog_manager: DialogManager,
-        keys,
+        keys: Iterable[WidgetEnum],
         cache: UserCache,
-    ):
+    ) -> None:
         await asyncio.gather(
             *[
                 asyncio.create_task(self._set_checked(cache, dialog_manager, cache_key))
