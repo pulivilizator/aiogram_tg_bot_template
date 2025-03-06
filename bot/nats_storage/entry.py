@@ -15,9 +15,9 @@ class NATSFSMStorage(BaseStorage):
         self,
         kv_states: KeyValue,
         kv_data: KeyValue,
-        serializer=json.dumps,
-        deserializer=json.loads,
-    ):
+        serializer: Any = json.dumps,
+        deserializer: Any = json.loads,
+    ) -> None:
         super().__init__()
         self.kv_states = kv_states
         self.kv_data = kv_data
@@ -44,7 +44,7 @@ class NATSFSMStorage(BaseStorage):
     async def get_state(self, key: StorageKey) -> Optional[str]:
         try:
             entry = await self.kv_states.get(self._key_formatter(key))
-            data = self.deserializer(entry.value)
+            data: str = self.deserializer(entry.value)
         except NotFoundError:
             return None
         return data
@@ -60,7 +60,8 @@ class NATSFSMStorage(BaseStorage):
             entry = await self.kv_data.get(self._key_formatter(key))
             if entry.value is None:
                 return {}
-            return self.deserializer(entry.value)
+            data: dict[str, Any] = self.deserializer(entry.value)
+            return data
         except KeyNotFoundError:
             return {}
 
