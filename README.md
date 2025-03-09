@@ -3,13 +3,13 @@
 ---
 
 A template for a Telegram bot that includes:
-- working with a cache (Redis),
-- database (PostgreSQL, SQLAlchemy),
-- localization (Fluentogram),
-- message broker and custom storage (NATS),
+- working with a cache (Redis)
+- database (PostgreSQL, SQLAlchemy)
+- localization (Fluentogram)
+- message broker and custom storage (NATS)
 - alembic migrations,
 - di (dishka)
-- and the bot logic itself on [Aiogram](https://docs.aiogram.dev/).
+- and the bot logic itself on [Aiogram](https://docs.aiogram.dev/)
 - [Ruff](https://docs.astral.sh/ruff/) is used as the linter
 
 You can find the full list of dependencies in [`pyproject.toml`](./pyproject.toml).
