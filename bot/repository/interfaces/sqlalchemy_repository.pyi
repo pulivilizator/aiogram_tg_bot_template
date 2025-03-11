@@ -44,13 +44,6 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     async def get(self, lookup_value: Any, response_model: Type[DTOModelResponse]) -> DTOModelResponse:
         ...
 
-    async def get(
-        self,
-        lookup_value: Any,
-        response_model: Optional[type[DTOModelResponse]],
-    ) -> DTOModel | DTOModelResponse:
-        ...
-
     # ------------------------------------------------
     # get_or_none
     # ------------------------------------------------
@@ -68,13 +61,6 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         response_model: Type[DTOModelResponse],
     ) -> DTOModelResponse | None:
         ...
-    async def get_or_none(
-        self,
-        lookup_value: Any,
-        response_model: Optional[type[DTOModelResponse]] = ...,
-    ) -> DTOModel | DTOModelResponse | None:
-        ...
-
     # ------------------------------------------------
     # create
     # ------------------------------------------------
@@ -91,12 +77,6 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         model_data: BaseModel,
         response_model: Type[DTOModelResponse],
     ) -> DTOModelResponse:
-        ...
-    async def create(
-        self,
-        model_data: BaseModel,
-        response_model: Optional[type[DTOModelResponse]] = ...,
-    ) -> DTOModel | DTOModelResponse:
         ...
 
     # ------------------------------------------------
@@ -118,13 +98,6 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         response_model: Type[DTOModelResponse],
     ) -> DTOModelResponse:
         ...
-    async def get_or_create(
-        self,
-        lookup_value: Any,
-        model_data: BaseModel,
-        response_model: Optional[type[DTOModelResponse]] = ...,
-    ) -> DTOModel | DTOModelResponse:
-        ...
 
     # ------------------------------------------------
     # update
@@ -144,13 +117,6 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
         update_data: BaseModel,
         response_model: Type[DTOModelResponse],
     ) -> DTOModelResponse:
-        ...
-    async def update(
-        self,
-        lookup_value: Any,
-        update_data: BaseModel,
-        response_model: Optional[type[DTOModelResponse]] = ...,
-    ) -> DTOModel | DTOModelResponse:
         ...
 
     # ------------------------------------------------
@@ -172,7 +138,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     @overload
     async def list(
         self,
-        filter_query: Query,
+        filter_query: Query[Any],
         response_model: None,
     ) -> list[DTOModel]:
         ...
@@ -186,13 +152,7 @@ class SQLAlchemyRepository(Generic[ModelType, DTOModel], AbstractSQLRepository):
     @overload
     async def list(
         self,
-        filter_query: Query,
+        filter_query: Query[Any],
         response_model: Type[DTOModelResponse],
     ) -> list[DTOModelResponse]:
-        ...
-    async def list(
-        self,
-        filter_query: Optional[Query] = ...,
-        response_model: Optional[type[DTOModelResponse]] = ...,
-    ) -> list[DTOModel | DTOModelResponse]:
         ...

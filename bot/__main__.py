@@ -34,7 +34,7 @@ async def dispatcher_factory(kv_states: KeyValue, kv_data: KeyValue) -> Dispatch
     )
 
 
-def dishka_container_factory():
+def dishka_container_factory() -> AsyncContainer:
     from bot.core.providers import get_providers
 
     return make_async_container(*get_providers())

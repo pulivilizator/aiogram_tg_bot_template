@@ -9,9 +9,9 @@ from dishka.integrations.aiogram import FromDishka
 from bot.cache import UserCache
 from bot.core import dto
 from bot.core.enums import Languages
+from bot.core.protocols import HasEvent, HasEventFromUser, HasFromUser
 from bot.interactors.user import CreateUserInteractor, GetUserInteractor
 
-from bot.core.protocols import HasEvent, HasEventFromUser, HasFromUser
 from .inject import aiogram_middleware_inject
 
 

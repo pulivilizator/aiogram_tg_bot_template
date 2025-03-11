@@ -20,7 +20,9 @@ class CacheProvider(Provider):
         elif isinstance(obj, HasEvent):
             from_user = obj.event.from_user
         else:
-            raise ValueError(f"Unable to define from_user for an object of type {type(obj).__name__}")
+            raise ValueError(
+                f"Unable to define from_user for an object of type {type(obj).__name__}"
+            )
         if from_user is None:
             raise ValueError("The from_user attribute is missing")
         return await UserCache(user_id=from_user.id, redis=r).load()
