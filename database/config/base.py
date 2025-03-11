@@ -8,6 +8,7 @@ from database.config.orm.mixin import ORMConfig
 class Config(BaseModel, ABC):
     orm: ORMConfig = ORMConfig()
 
+    @property
     @abstractmethod
     def uri(self) -> str: ...
 

@@ -15,12 +15,11 @@ class CreateUserInteractor(BaseInteractor):
     async def execute(self, data: dto.CreateUserDTO) -> dto.UserWithSettingsDTO:
         user = data.user
         settings = data.settings
-        new_user = await self._user_repo.create(user)
+        new_user = await self._user_repo.create(user, response_model=dto.UserDTO)
         settings.user_id = new_user.telegram_id
         await self._user_settings_repo.create(settings)
         return await self._user_repo.get(
-            new_user.telegram_id,
-            response_model=dto.UserWithSettingsDTO,
+            new_user.telegram_id
         )
 
 
@@ -51,5 +50,4 @@ class GetUserInteractor(BaseInteractor):
     async def execute(self, user_id: str | int) -> dto.UserWithSettingsDTO | None:
         return await self._user_repo.get_or_none(
             user_id,
-            response_model=dto.UserWithSettingsDTO,
         )

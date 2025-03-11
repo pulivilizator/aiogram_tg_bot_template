@@ -12,7 +12,7 @@ class RepositoryProvider(Provider):
         return UserRepository(
             session=session,
             model=User,
-            dto_model=dto.UserDTO,
+            dto_model=dto.UserWithSettingsDTO,
             lookup_field="telegram_id",
         )
 

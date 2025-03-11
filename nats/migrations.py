@@ -7,12 +7,15 @@ import nats
 from nats.js.api import KeyValueConfig
 
 
-async def main():
+async def main() -> None:
     logger = structlog.get_logger(__name__)
-    nc = await nats.connect(os.getenv("NATS_URL"))
+    nc_url = os.getenv("NATS_URL")
+    if not nc_url:
+        raise ValueError("NATS_URL environment variable not set")
+    nc = await nats.connect(nc_url)
     js = nc.jetstream()
 
-    logger.debug("NATS соединение установлено")
+    logger.debug("NATS connection established")
 
     await js.create_key_value(KeyValueConfig("fsm_data_aiogram"))
     await js.create_key_value(KeyValueConfig("fsm_states_aiogram"))
