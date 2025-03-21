@@ -7,7 +7,7 @@ A template for a Telegram bot that includes:
 - database (PostgreSQL, SQLAlchemy)
 - localization (Fluentogram)
 - message broker and custom storage (NATS)
-- alembic migrations,
+- alembic migrations
 - di (dishka)
 - and the bot logic itself on [Aiogram](https://docs.aiogram.dev/)
 - [Ruff](https://docs.astral.sh/ruff/) is used as the linter
